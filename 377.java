@@ -1,27 +1,25 @@
 class Solution {
-    
-    private int findCount(int index, int[] nums, int target, HashMap<Integer, Integer> memo){
-        if(index >= nums.length || target < 0 ) return 0;
-        target = target - nums[index];
-        if(target  == 0){
-            return 1;
+    private int findCombinations(int target, int[] nums,  Map<Integer, Integer> cache){
+        if(target < 0) return 0;
+        if(cache.containsKey(target) == true) return cache.get(target);
+        
+        if( target == 0){            
+            cache.put(target, cache.getOrDefault(target,0)+1);
+            return cache.get(target);
         }
-        if(memo.containsKey(target) == true) return memo.get(target);
         int count = 0;
         for(int i=0;i<nums.length;i++){
-            count+=this.findCount(i, nums, target, memo);
+            count+=findCombinations(target-nums[i], nums, cache);          
         }
-        memo.put(target, count);
-        target+=nums[index];
+        cache.put(target, count);
         return count;
     }
     
     public int combinationSum4(int[] nums, int target) {
-        int count = 0;
-        HashMap<Integer, Integer> memo = new HashMap();
-        for(int i=0;i<nums.length;i++){
-            count+=this.findCount(i, nums, target, memo);
-        }
-        return count;
+        // int[] cache = new int[target+1];
+        
+        Map<Integer, Integer> cache = new HashMap();
+        return this.findCombinations(target, nums, cache);
+        
     }
 }
