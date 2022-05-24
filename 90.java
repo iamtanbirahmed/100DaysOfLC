@@ -1,33 +1,28 @@
 class Solution {
     
-    private List<List<Integer>> result = new ArrayList();
+    List<List<Integer>> result = new LinkedList();
     
-    private void findPermutations(LinkedList<Integer> currentList, int index, Integer[] nums, HashMap<Integer, Integer> count){
-        if(index>=nums.length || count.get(nums[index]) == 0) return;
-        currentList.add(nums[index]);
-        count.put(nums[index], count.get(nums[index])-1);
-        this.result.add(new LinkedList<Integer>(currentList));
-        for( int i=index;i<nums.length;i++){
-            this.findPermutations(currentList, i, nums, count);
+    private void findSubsets(LinkedList<Integer> currentList, Map<Integer, Integer> count, Integer[] nums, int index){
+        
+        this.result.add(new LinkedList(currentList));
+        for(int i=index;i<nums.length;i++){
+            int key = nums[i];
+            if(count.get(key) <= 0) continue;
+            count.put(key, count.get(key)-1);
+            currentList.add(key);
+            this.findSubsets(currentList, count, nums, i);
+            count.put(key, count.get(key)+1);
+            currentList.removeLast();
         }
-        currentList.removeLast();
-        count.put(nums[index], count.get(nums[index])+1);
     }
     
-    
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-        HashMap<Integer, Integer> count = new HashMap();
+        Map<Integer, Integer> count = new HashMap();
         for(int n: nums){
             count.put(n, count.getOrDefault(n,0)+1);
-        }
-        
-        this.result.add(new LinkedList<Integer>());
-        
+        }        
         Integer[] keys = count.keySet().toArray(new Integer[count.keySet().size()]);
-        for( int i=0;i<keys.length;i++){
-            this.findPermutations(new LinkedList<Integer>(), i, keys, count);
-        }
-        
+        this.findSubsets(new LinkedList<Integer>(), count, keys, 0);        
         return this.result;
     }
 }
