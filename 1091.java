@@ -1,37 +1,36 @@
 class Solution {
     
-     
-    
-    public int shortestPathBinaryMatrix(int[][] grid) {
-        
+    private boolean isValid(int x, int y, int[][] grid){
         int m = grid.length;
         int n = grid[0].length;
+        if(x<0 || x>=m || y<0 || y>=n || grid[x][y]!=0)
+            return false;
         
-        if(grid[m-1][n-1] == 1 || grid[0][0] == 1) return -1;
-        
-        Queue<Pair<Integer, Integer>> queue = new LinkedList();
-        queue.offer(new Pair(0,0));
+        return true;
+    }
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        if(grid[0][0] == 1 || grid[grid.length-1][grid[0].length-1] == 1) return -1;
+        Queue<int[]> queue = new LinkedList();
+        queue.offer(new int[]{0,0});
         grid[0][0] = 1;
-        int[] dx = {1,1,1,-1,-1,-1,0,0};
-        int[] dy = {-1,0,1,-1,0,1,-1,1};
         
         while(queue.isEmpty() == false){
-            Pair<Integer, Integer> pair = queue.poll();
-            int x = pair.getKey();
-            int y = pair.getValue();
+            int[] node = queue.poll();
             
-            if(x == m-1 && y == n-1)
-                return grid[x][y];
+            int[] dx = {-1,-1,-1,0,0,1,1,1};
+            int[] dy = {-1,0,1,-1,1,-1,0,1};
+            
+            if(node[0] == grid.length-1 && node[1] == grid[0].length-1)
+                    return grid[node[0]][node[1]];
             
             for(int i=0;i<8;i++){
-                int X = x+dx[i];
-                int Y = y+dy[i];
-                if(X<0 || X>=m || Y<0 || Y>=n || grid[X][Y] !=0){
-                    continue;
+                int X = node[0]+dx[i];
+                int Y = node[1]+dy[i];                
+                if(this.isValid(X,Y, grid)){
+                    grid[X][Y]=grid[node[0]][node[1]]+1;
+                    queue.offer(new int[]{X,Y});
                 }
-                grid[X][Y] = grid[x][y]+1;
-                queue.offer(new Pair(X,Y));
-            }
+            }            
         }
         
         return -1;
