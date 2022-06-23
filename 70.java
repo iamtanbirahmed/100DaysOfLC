@@ -1,17 +1,14 @@
 class Solution {
-    public int meomizedClimbStairs(int n, int[] memo){
-        if(memo[n]>=1)return memo[n];
-        memo[n-1] = this.meomizedClimbStairs(n-1, memo);
-        memo[n-2] = this.meomizedClimbStairs(n-2, memo);
-        memo[n] = memo[n-1]+memo[n-2];
-        return memo[n];
-        
+    
+    private int countWays(int n, Map<Integer, Integer> cache){
+        if(n <= 1) return 1;
+        if(cache.containsKey(n)) return cache.get(n);
+        int result = countWays(n-2, cache) + countWays(n-1, cache);;
+        cache.put(n, result);
+        return result;
     }
+    
     public int climbStairs(int n) {
-        int[] memo = new int[n+1];
-        memo[0] = 1;
-        memo[1] = 1;
-        return this.meomizedClimbStairs(n, memo);
-        
+        return countWays(n, new HashMap<Integer, Integer>());
     }
 }
