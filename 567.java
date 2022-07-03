@@ -1,30 +1,20 @@
 class Solution {
-    
-    private boolean isPermutation(String s1, String s2){
-        Map<Character, Integer> count = new HashMap();
-        for(int i=0;i<s1.length();i++){
-            char ch = s1.charAt(i);
-            count.put(ch, count.getOrDefault(ch,0)+1);
-        }
-        for(int j=0;j<s2.length();j++){
-            char ch2 = s2.charAt(j);
-            if(count.containsKey(ch2) == false)
-                return false;
-            count.put(ch2, count.get(ch2)-1);
-            if(count.get(ch2) == 0)
-                count.remove(ch2);
-        }
-        
-        return count.size() == 0;
-        
-    }
-    
     public boolean checkInclusion(String s1, String s2) {
-        int k = s1.length();
-        
-        for(int i=0;i<=s2.length()-k;i++){
-            String str = s2.substring(i, i+k);
-            if(this.isPermutation(str, s1))
+        if(s1.length()>s2.length()) return false;
+        int[] count1 = new int[26];
+        int[] count2 = new int[26];
+        int len = s1.length();
+        for(int i=0;i<len;i++){
+            count1[s1.charAt(i)-'a']++;
+            count2[s2.charAt(i)-'a']++;
+        }
+        int left = 0;
+        if(Arrays.equals(count1, count2)) return true;
+        for(int i=len;i<s2.length();i++){
+            count2[s2.charAt(i)-'a']++;            
+            count2[s2.charAt(left)-'a']--;
+            left++;
+            if(Arrays.equals(count1, count2)) 
                 return true;
         }
         
