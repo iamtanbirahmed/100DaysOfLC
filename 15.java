@@ -1,27 +1,27 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        Set<List<Integer>> result = new HashSet();
+        List<List<Integer>> result = new LinkedList();
         Arrays.sort(nums);
-        
-        for(int i=nums.length-1;i>=0;i--){
-            int target = (-1)*nums[i];
-            int left = 0;
-            int right = i-1;
-            
+        for(int i=0;i<nums.length;i++){
+            if(i!=0 && nums[i] == nums[i-1])
+                continue;
+            int target = nums[i]*(-1);
+            int left = i+1;
+            int right = nums.length-1;
             while(left<right){
                 int sum = nums[left]+nums[right];
-                if(sum == target){
+                if(sum > target){
+                    right--;
+                }else if(sum < target){
+                    left++;
+                }else{ 
                     result.add(Arrays.asList(new Integer[]{nums[i], nums[left], nums[right]}));
-                    right--;
                     left++;
-                }else if(sum>target){
-                    right--;
-                }else{
-                    left++;
+                    while(left< right && nums[left] == nums[left-1])
+                        left++;                    
                 }
             }
         }
-        
-        return new ArrayList(result);
+        return result;
     }
 }
