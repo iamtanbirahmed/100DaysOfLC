@@ -1,34 +1,34 @@
 class Solution {
     public boolean backspaceCompare(String s, String t) {
-        Stack<Character> stack = new Stack();
-        StringBuilder sb1 = new StringBuilder();
+        Stack<Character> sStack = new Stack();
+        Stack<Character> tStack = new Stack();
         for(char ch: s.toCharArray()){
-            if(ch == '#' && stack.isEmpty() == false){
-                stack.pop();
-                
-            }else if(ch != '#'){
-                stack.push(ch);    
-            }
-            
-        }
-        while(stack.isEmpty() == false){
-            sb1.append(stack.pop());
-        }
-        
-        for(char ch: t.toCharArray()){
-            if(ch == '#' && stack.isEmpty() == false){
-                stack.pop();
+            if(sStack.isEmpty() == false && ch == '#'){
+                sStack.pop();
                 continue;
-            }else if(ch !='#'){
-                stack.push(ch);    
+            }else if(ch!='#'){
+                sStack.push(ch);    
             }
             
         }
-        StringBuilder sb2 = new StringBuilder();
-        while(stack.isEmpty() == false){
-            sb2.append(stack.pop());
+        for(char ch: t.toCharArray()){
+            if(tStack.isEmpty() == false && ch == '#'){
+                tStack.pop();
+                continue;
+            }else if(ch!='#'){
+                tStack.push(ch);    
+            }
+            
         }
         
-        return sb1.toString().equals(sb2.toString());
+        if(sStack.size() != tStack.size())
+            return false;
+        while(sStack.isEmpty() == false){
+            if(sStack.peek()!=tStack.peek())
+                return false;
+            sStack.pop();
+            tStack.pop();
+        }
+        return true;
     }
 }
