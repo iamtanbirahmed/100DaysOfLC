@@ -3,19 +3,16 @@ class Solution {
         int left = 0;
         int right = height.length-1;
         int max = Integer.MIN_VALUE;
-        
-        while(left < right){
-            int currentHeight = Math.min(height[left], height[right]);
-            int currentArea = currentHeight*(right-left);
-            
-            max = Math.max(currentArea, max);
-            
-            if(height[left]< height[right] ){
-                left++;
-            }else{
+        while(left<right){
+            int width = right-left;
+            max = Math.max(max, width*Math.min(height[left], height[right]));
+            if(height[left] > height[right]){
                 right--;
+            }else{
+                left++;
             }
         }
+        
         return max;
     }
 }
