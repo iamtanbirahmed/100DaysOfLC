@@ -1,21 +1,21 @@
 class Solution {
-    List<List<Integer>> result = new LinkedList();
-    private void findPath(LinkedList<Integer> currentPath, int n, int[][] graph, int source){
-        if(source == n-1){
-            result.add(new LinkedList(currentPath));
+    private List<List<Integer>> result = new LinkedList();
+    private void findPaths(LinkedList<Integer> currentPath, int source, int[][] graph, int target){
+        if(source == target){
+            this.result.add(new LinkedList(currentPath));
         }
-        for(int child: graph[source]){
-            currentPath.add(child);
-            this.findPath(currentPath, n, graph, child);
+        for(int n: graph[source]){
+            currentPath.add(n);
+            this.findPaths(currentPath, n, graph, target);
             currentPath.removeLast();
         }
     }
     
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        int n = graph.length;
-        LinkedList<Integer> currentList = new LinkedList();
-        currentList.add(0);
-        this.findPath(currentList, n, graph, 0);
+        int target = graph.length-1;
+        LinkedList<Integer> currentPath = new LinkedList();
+        currentPath.add(0);
+        this.findPaths(currentPath, 0, graph, target);
         return this.result;
     }
 }
