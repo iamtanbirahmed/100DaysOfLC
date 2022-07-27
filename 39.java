@@ -1,30 +1,22 @@
 class Solution {
     
     private List<List<Integer>> result = new LinkedList();
-    
-    public void findCombination(LinkedList<Integer> currentList, int[] candidates, int index, int target, int currentSum){
-        if(index >= candidates.length) return;
-        
-        if(currentSum+candidates[index] > target)
-            return;
-        
-        currentList.add(candidates[index]);
-        if(currentSum+candidates[index] == target){
-            LinkedList<Integer> tmp = new LinkedList(currentList);
-            result.add(tmp);
+    private void findCombination(LinkedList<Integer> currentList, int currentSum, int target, int index, int[] nums){
+        if(index >= nums.length || currentSum > target) return ;
+        if(currentSum == target){
+            this.result.add(new LinkedList(currentList));
         }
-        for(int i=index;i<candidates.length;i++){
-            this.findCombination(currentList, candidates, i, target, currentSum+candidates[index]);    
+        for(int i=index;i<nums.length;i++){
+            currentList.add(nums[i]);
+            currentSum+=nums[i];
+            this.findCombination(currentList, currentSum, target, i, nums);
+            currentList.removeLast();
+            currentSum-=nums[i];
         }
-        
-        currentList.removeLast();
     }
     
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        for(int i=0;i<candidates.length;i++){
-            this.findCombination(new LinkedList<Integer>(), candidates, i, target, 0);    
-        }
-        
-        return result;
+        this.findCombination(new LinkedList<Integer>(), 0, target, 0, candidates);
+        return this.result;
     }
 }
