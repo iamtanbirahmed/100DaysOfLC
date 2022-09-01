@@ -14,24 +14,19 @@
  * }
  */
 class Solution {
-    private int count = 0;
-    private Stack<Integer> maxStack = new Stack();
     
-    public void countNodes(TreeNode root){
-        if(root == null) return;
-        if(maxStack.size() == 0 || root.val >= maxStack.peek()){
-            maxStack.push(root.val);
-            count++;
-        }
+    private int findGoodNodes(TreeNode root, int max){
+        if(root == null) return 0;
+        boolean isCurrentNode = (max <= root.val) ? true : false;
+        max  = Math.max(max, root.val);
+        int left  = this.findGoodNodes(root.left, max);
+        int right  = this.findGoodNodes(root.right, max);
         
-        this.countNodes(root.left);
-        this.countNodes(root.right);
-        if(maxStack.peek() == root.val)
-            maxStack.pop();
+        return (isCurrentNode) ? (left+right)+1 : left+right;
     }
     
     public int goodNodes(TreeNode root) {
-        this.countNodes(root);
-        return count;
+        if(root == null) return 0;
+        return this.findGoodNodes(root, root.val);
     }
 }
